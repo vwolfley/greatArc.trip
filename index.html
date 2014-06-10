@@ -20,11 +20,23 @@
       stroke-width: 3px;
       stroke-linecap: round;
       }
+
+      .route {
+        fill: none;
+        stroke: red;
+        stroke-width: 3px;
+      }
       
       .points circle {
         fill: #fff;
         stroke: red;
         stroke-width:2px;
+      }
+
+      .points text {
+        font: 11px sans-serif;
+        text-anchor: middle;
+        text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
       }
 
       .boundary {
@@ -45,16 +57,32 @@
 
     // http://bl.ocks.org/mbostock/raw/4090846/world-50m.json
 
-    // [-112.01, 33.44], [-77.54, 34.42] - Phoenix, AZ to NC
-    // [-111.89, 40.76], [-77.54, 34.42] - Salt Lake City, UT to NC
-    // [-122.33, 47.61], [-77.54, 34.42] - Seattle, WA to NC
-    // [-104.96, 39.76], [-77.54, 34.42] - Denver, CO to NC
-    // [-94.16, 42.49], [-77.54, 34.42] - Fort Dodge, IA to NC
-    // [-83.24, 33.08], [-77.54, 34.42] - Milledgeville, GA to NC
-    // [139.64, 35.45], [-77.54, 34.42] - Yokohama, Japan to NC
-
     var width = 960,
         height = 750;
+
+    var places = {
+          TSI: [-77.54, 34.42],   // Topsail Island, NC
+          PHX: [-112.01, 33.44],  // Phoenix, AZ
+          SLC: [-111.89, 40.76],  // Salt Lake City, UT
+          SEA: [-122.33, 47.61],  // Seattle, WA
+          DEN: [-104.96, 39.76],  // Denver, CO
+          FTD: [-94.16, 42.49],   // Fort Dodge, IA
+          MIL: [-83.24, 33.08],   // Milledgeville, GA
+          YOK: [139.64, 35.45]    // Yokohama, Japan
+    }
+
+    var route = {
+      type: "LineString",
+      coordinates: [
+        places.PHX, places.TSI,
+        places.SLC, places.TSI,
+        places.SEA, places.TSI,
+        places.DEN, places.TSI,
+        places.FTD, places.TSI,
+        places.MIL, places.TSI,
+        places.YOK, places.TSI
+      ]
+    };   
 
     var projection = d3.geo.equirectangular()
         .scale(153)
@@ -75,6 +103,11 @@
         .datum(graticule)
         .attr("class", "graticule")
         .attr("d", path);
+
+    svg.append("path")
+        .datum(route)
+        .attr("class", "route")
+        .attr("d", path);
         
     var point = svg.append("g")
         .attr("class", "points")
@@ -91,17 +124,17 @@
         .attr("dy", ".71em")
         .text(function(d) { return d.key; });
 
-    svg.append("path")
-        .datum({type: "LineString", coordinates: [[-112.01, 33.44], [-77.54, 34.42],
-                                                  [-111.89, 40.76], [-77.54, 34.42],
-                                                  [-122.33, 47.61], [-77.54, 34.42],
-                                                  [-104.96, 39.76], [-77.54, 34.42],
-                                                  [-94.16, 42.49], [-77.54, 34.42],
-                                                  [-83.24, 33.08], [-77.54, 34.42],
-                                                  [139.64, 35.45], [-77.54, 34.42]
-                                                ]})
-        .attr("class", "arc")
-        .attr("d", path);
+    // svg.append("path")
+    //     .datum({type: "LineString", coordinates: [[-112.01, 33.44], [-77.54, 34.42],
+    //                                               [-111.89, 40.76], [-77.54, 34.42],
+    //                                               [-122.33, 47.61], [-77.54, 34.42],
+    //                                               [-104.96, 39.76], [-77.54, 34.42],
+    //                                               [-94.16, 42.49], [-77.54, 34.42],
+    //                                               [-83.24, 33.08], [-77.54, 34.42],
+    //                                               [139.64, 35.45], [-77.54, 34.42]
+    //                                             ]})
+    //     .attr("class", "arc")
+    //     .attr("d", path);
 
     d3.json("data/world-50m.json", function(error, world) {
       svg.insert("path", ".graticule")
