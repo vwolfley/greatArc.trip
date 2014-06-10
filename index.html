@@ -46,7 +46,7 @@
 // [139.64, 35.45], [-77.54, 34.42] - Yokohama, Japan to NC
 
 var width = 960,
-    height = 500;
+    height = 750;
 
 var projection = d3.geo.equirectangular()
     .scale(153)
@@ -56,12 +56,6 @@ var projection = d3.geo.equirectangular()
 
 var path = d3.geo.path()
     .projection(projection);
-    
-var zoom = d3.behavior.zoom()
-    .translate([0, 0])
-    .scale(1)
-    .scaleExtent([1, 8])
-    .on("zoom", zoomed);
 
 var graticule = d3.geo.graticule();
 
@@ -98,11 +92,6 @@ d3.json("data/world-50m.json", function(error, world) {
       .attr("d", path);
 });
 
-function zoomed() {
-  features.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-  features.select(".state-border").style("stroke-width", 1.5 / d3.event.scale + "px");
-  features.select(".county-border").style("stroke-width", .5 / d3.event.scale + "px");
-}
 
 d3.select(self.frameElement).style("height", height + "px");
 
