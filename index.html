@@ -20,6 +20,12 @@
       stroke-width: 3px;
       stroke-linecap: round;
       }
+      
+      .points circle {
+        fill: #fff;
+        stroke: red;
+        stroke-width:2px;
+      }
 
       .boundary {
       fill: none;
@@ -69,6 +75,21 @@
         .datum(graticule)
         .attr("class", "graticule")
         .attr("d", path);
+        
+    var point = svg.append("g")
+        .attr("class", "points")
+        .selectAll("g")
+        .data(d3.entries(places))
+        .enter().append("g")
+        .attr("transform", function(d) { return "translate(" + projection(d.value) + ")"; });
+
+    point.append("circle")
+        .attr("r", 4.5);
+
+    point.append("text")
+        .attr("y", 10)
+        .attr("dy", ".71em")
+        .text(function(d) { return d.key; });
 
     svg.append("path")
         .datum({type: "LineString", coordinates: [[-112.01, 33.44], [-77.54, 34.42],
