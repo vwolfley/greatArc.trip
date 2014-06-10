@@ -68,7 +68,8 @@
           DEN: [-104.96, 39.76],  // Denver, CO
           FTD: [-94.16, 42.49],   // Fort Dodge, IA
           MIL: [-83.24, 33.08],   // Milledgeville, GA
-          YOK: [139.64, 35.45]    // Yokohama, Japan
+          YOK: [139.64, 35.45],    // Yokohama, Japan
+          LAX: [-114.75,34.38]
     }
 
     var route = {
@@ -80,7 +81,7 @@
         places.DEN, places.TSI,
         places.FTD, places.TSI,
         places.MIL, places.TSI,
-        places.YOK, places.TSI
+        places.YOK, places.LAX, places.TSI
       ]
     };   
 
@@ -124,18 +125,7 @@
         .attr("dy", ".71em")
         .text(function(d) { return d.key; });
 
-    // svg.append("path")
-    //     .datum({type: "LineString", coordinates: [[-112.01, 33.44], [-77.54, 34.42],
-    //                                               [-111.89, 40.76], [-77.54, 34.42],
-    //                                               [-122.33, 47.61], [-77.54, 34.42],
-    //                                               [-104.96, 39.76], [-77.54, 34.42],
-    //                                               [-94.16, 42.49], [-77.54, 34.42],
-    //                                               [-83.24, 33.08], [-77.54, 34.42],
-    //                                               [139.64, 35.45], [-77.54, 34.42]
-    //                                             ]})
-    //     .attr("class", "arc")
-    //     .attr("d", path);
-
+   
     d3.json("data/world-50m.json", function(error, world) {
       svg.insert("path", ".graticule")
           .datum(topojson.feature(world, world.objects.land))
